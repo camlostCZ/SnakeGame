@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>SnakeGame in Scala.js</title>
+        <style type="text/css">
+            #snake-game {
+                border: solid bla/Documentsck 1px
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Snake Game</h1>
+        <canvas id="snake-game" width="640" height="400">
+            You have an outdated web browser. Upgrade it to run the game.
+        </canvas>
+
+        <!-- Include Scala.js compiled code -->
+        <script type="text/javascript" src="./target/scala-2.12/scala-js-snake-game-fastopt.js"></script>
+        <!-- Run the application -->
+        <script type="text/javascript">
+            snake.SnakeGame().main()
+        </script>
+    </body>
+</html>
