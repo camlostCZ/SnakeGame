@@ -6,16 +6,6 @@ import org.scalajs.dom
 import org.scalajs.dom.ext.KeyCode
 
 object SnakeGame extends js.JSApp {
-    val canvasId = "snake-game"
-    val blockSize = 24
-    val viewWidth = 40
-    val viewHeight = 25
-    val colorBackground = "white"
-    val colorForeground = "black"
-    val colorSnakeHead  = "orange"
-    val colorSnake      = "yellow"
-    val colorFood       = "green"
-
     var timer: Option[js.timers.SetIntervalHandle] = None
     val rnd = scala.util.Random
     val hero = new Snake()
@@ -23,9 +13,9 @@ object SnakeGame extends js.JSApp {
     var food: List[Position] = Nil
 
     def main(): Unit = {
-        val canvas = dom.document.getElementById(canvasId).asInstanceOf[dom.html.Canvas]
-        canvas.width = viewWidth * blockSize
-        canvas.height = viewHeight * blockSize
+        val canvas = dom.document.getElementById(Config.canvasId).asInstanceOf[dom.html.Canvas]
+        canvas.width = Config.viewWidth * Config.blockSize
+        canvas.height = Config.viewHeight * Config.blockSize
         val ctx = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
 
         setupUI(ctx)
@@ -42,7 +32,7 @@ object SnakeGame extends js.JSApp {
         def update() = {
             // Try to generate food
             if (rnd.nextInt(100) < 8) {
-                food = Position(1 + rnd.nextInt(viewWidth - 2), 1 + rnd.nextInt(viewHeight - 2)) :: food
+                food = Position(1 + rnd.nextInt(Config.viewWidth - 2), 1 + rnd.nextInt(Config.viewHeight - 2)) :: food
                 drawFood(food.head, ctx)
 
                 // FIXME Food generated inside Snake's body
@@ -72,47 +62,47 @@ object SnakeGame extends js.JSApp {
 
     def clearSnake(hero: Snake, ctx: dom.CanvasRenderingContext2D) = {
         // Optimization: clear the last block only
-        ctx.clearRect(hero.body.last.x * blockSize, hero.body.last.y * blockSize, blockSize, blockSize)
+        ctx.clearRect(hero.body.last.x * Config.blockSize, hero.body.last.y * Config.blockSize, Config.blockSize, Config.blockSize)
     }
 
     def clearView(ctx: dom.CanvasRenderingContext2D) = {
-        ctx.fillStyle = colorBackground
+        ctx.fillStyle = Config.colorBackground
         ctx.fillRect(0, 0, 639, 399)
     }
 
     def drawBorder(ctx: dom.CanvasRenderingContext2D) = {
-        ctx.fillStyle = colorForeground
-        for (i <- 0 to viewWidth) {
-            ctx.fillRect(i * blockSize, 0, blockSize, blockSize)
-            ctx.fillRect(i * blockSize, (viewHeight - 1) * blockSize, blockSize, blockSize)
+        ctx.fillStyle = Config.colorForeground
+        for (i <- 0 to Config.viewWidth) {
+            ctx.fillRect(i * Config.blockSize, 0, Config.blockSize, Config.blockSize)
+            ctx.fillRect(i * Config.blockSize, (Config.viewHeight - 1) * Config.blockSize, Config.blockSize, Config.blockSize)
         }
-        for (i <- 0 to viewHeight) {
-            ctx.fillRect(0, i * blockSize, blockSize, (i + 1) * blockSize)
-            ctx.fillRect((viewWidth - 1) * blockSize, i * blockSize, blockSize, blockSize)
+        for (i <- 0 to Config.viewHeight) {
+            ctx.fillRect(0, i * Config.blockSize, Config.blockSize, (i + 1) * Config.blockSize)
+            ctx.fillRect((Config.viewWidth - 1) * Config.blockSize, i * Config.blockSize, Config.blockSize, Config.blockSize)
         }
     }
 
     def drawFood(pos: Position, ctx: dom.CanvasRenderingContext2D) = {
-        val x = pos.x * blockSize
-        val y = pos.y * blockSize
-        ctx.fillStyle = colorFood
-        ctx.fillRect(x, y, blockSize, blockSize)
+        val x = pos.x * Config.blockSize
+        val y = pos.y * Config.blockSize
+        ctx.fillStyle = Config.colorFood
+        ctx.fillRect(x, y, Config.blockSize, Config.blockSize)
     }
 
     def drawSnake(hero: Snake, ctx: dom.CanvasRenderingContext2D) = {
         def drawSnakeHead(pos: Position) = {
-            val x = pos.x * blockSize
-            val y = pos.y * blockSize
-            ctx.fillStyle = colorSnakeHead
-            ctx.fillRect(x + 1, y + 1, blockSize - 2, blockSize - 2)
-            ctx.strokeRect(x + 1, y + 1, blockSize - 2, blockSize - 2)        
+            val x = pos.x * Config.blockSize
+            val y = pos.y * Config.blockSize
+            ctx.fillStyle = Config.colorSnakeHead
+            ctx.fillRect(x + 1, y + 1, Config.blockSize - 2, Config.blockSize - 2)
+            ctx.strokeRect(x + 1, y + 1, Config.blockSize - 2, Config.blockSize - 2)        
         }
         def drawSnakeBody(pos: Position) = {
-            val x = pos.x * blockSize
-            val y = pos.y * blockSize
-            ctx.fillStyle = colorSnake
-            ctx.fillRect(x + 1, y + 1, blockSize - 2, blockSize - 2)
-            ctx.strokeRect(x + 1, y + 1, blockSize - 2, blockSize - 2)
+            val x = pos.x * Config.blockSize
+            val y = pos.y * Config.blockSize
+            ctx.fillStyle = Config.colorSnake
+            ctx.fillRect(x + 1, y + 1, Config.blockSize - 2, Config.blockSize - 2)
+            ctx.strokeRect(x + 1, y + 1, Config.blockSize - 2, Config.blockSize - 2)
         }
 
         drawSnakeHead(hero.body.head)
@@ -123,7 +113,7 @@ object SnakeGame extends js.JSApp {
     }
 
     def isValidPosition(pos: Position): Boolean = {
-        pos.x > 0 && pos.y > 0 && pos.x < viewWidth -1 && pos.y < viewHeight - 1
+        pos.x > 0 && pos.y > 0 && pos.x < Config.viewWidth -1 && pos.y < Config.viewHeight - 1
     }
 
     def setupUI(ctx: dom.CanvasRenderingContext2D) = {
