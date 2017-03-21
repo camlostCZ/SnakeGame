@@ -45,10 +45,7 @@ object SnakeGame extends js.JSApp {
 
             // Remove hero.position from food as it's been just eaten
             if (food.contains(hero.position)) {
-                food = food.filter {
-                    case p: Position if (p.x == hero.position.x && p.y == hero.position.y) => false
-                    case _ => true
-                }
+                food = food.filter(f => {f.x != hero.position.x || f.y != hero.position.y})
 
                 score += 1
                 updateScore(score)
