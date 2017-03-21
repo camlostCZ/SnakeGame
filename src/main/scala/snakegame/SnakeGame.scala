@@ -1,15 +1,10 @@
 package snakegame
 
 import scala.scalajs.js
-import scalajs.js.annotation.JSExport
 
 import org.scalajs.dom
 import org.scalajs.dom.ext.KeyCode
 
-import Direction._
-
-
-@JSExport
 object SnakeGame extends js.JSApp {
     val canvasId = "snake-game"
     val blockSize = 24
@@ -24,10 +19,9 @@ object SnakeGame extends js.JSApp {
     var timer: Option[js.timers.SetIntervalHandle] = None
     val rnd = scala.util.Random
     val hero = new Snake()
-    var dir = EAST
+    var dir = Direction.EAST
     var food: List[Position] = Nil
 
-    @JSExport
     def main(): Unit = {
         val canvas = dom.document.getElementById(canvasId).asInstanceOf[dom.html.Canvas]
         canvas.width = viewWidth * blockSize
@@ -37,10 +31,10 @@ object SnakeGame extends js.JSApp {
         setupUI(ctx)
         dom.window.addEventListener("keydown", (e: dom.KeyboardEvent) => {
             dir = e.keyCode match {
-                case KeyCode.Up    => NORTH
-                case KeyCode.Right => EAST
-                case KeyCode.Down  => SOUTH
-                case KeyCode.Left  => WEST
+                case KeyCode.Up    => Direction.NORTH
+                case KeyCode.Right => Direction.EAST
+                case KeyCode.Down  => Direction.SOUTH
+                case KeyCode.Left  => Direction.WEST
                 case _             => dir
             }
         }, false)
