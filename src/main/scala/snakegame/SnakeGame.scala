@@ -104,11 +104,11 @@ object SnakeGame extends js.JSApp {
             ctx.strokeRect(x + 1, y + 1, Config.blockSize - 2, Config.blockSize - 2)
         }
 
-        drawSnakeHead(hero.body.head)
         if (!hero.body.tail.isEmpty) {
             drawSnakeBody(hero.body.tail.head)
             drawSnakeBody(hero.body.last)
         }
+        drawSnakeHead(hero.body.head)
     }
 
     def isValidPosition(pos: Position): Boolean = {
