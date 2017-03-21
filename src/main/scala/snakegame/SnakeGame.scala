@@ -8,7 +8,7 @@ import org.scalajs.dom.ext.KeyCode
 object SnakeGame extends js.JSApp {
     var timer: Option[js.timers.SetIntervalHandle] = None
     val rnd = scala.util.Random
-    val hero = new Snake()
+    val hero = new Snake(Config.viewWidth / 2 - 1, Config.viewHeight / 2 - 1)
     var dir = Direction.EAST
     var food: List[Position] = Nil
     var score = 1

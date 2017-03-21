@@ -2,9 +2,9 @@ package snakegame
 
 import Direction._
 
-class Snake {
+class Snake(x: Int, y: Int) {
     var body: List[Position] = List(
-        Position(19, 12))
+        Position(x, y))
 
     private var wallHit = false
 
