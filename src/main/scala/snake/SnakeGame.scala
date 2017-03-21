@@ -1,6 +1,7 @@
 package snake
 
 import scala.scalajs.js
+import scalajs.js.annotation.JSExport
 
 import org.scalajs.dom
 import org.scalajs.dom.ext.KeyCode
@@ -57,6 +58,7 @@ class Snake {
     }
 }
 
+@JSExport
 object SnakeGame extends js.JSApp {
     val canvasId = "snake-game"
     val blockSize = 24
@@ -64,14 +66,17 @@ object SnakeGame extends js.JSApp {
     val viewHeight = 25
     val colorBackground = "white"
     val colorForeground = "black"
-    var colorSnake      = "yellow"
+    var colorSnakeHead  = "orange"
+    val colorSnake      = "yellow"
     val colorFood       = "green"
 
+    var timer: Option[js.timers.SetIntervalHandle] = None
     val rnd = scala.util.Random
     val hero = new Snake()
     var dir = EAST
     var food: List[Position] = Nil
 
+    @JSExport
     def main(): Unit = {
         val canvas = dom.document.getElementById(canvasId).asInstanceOf[dom.html.Canvas]
         canvas.width = viewWidth * blockSize
@@ -89,19 +94,13 @@ object SnakeGame extends js.JSApp {
             }
         }, false)
         
-        val update = () => {
+        def update() = {
             // Try to generate food
             if (rnd.nextInt(100) < 8) {
                 food = Position(1 + rnd.nextInt(viewWidth - 2), 1 + rnd.nextInt(viewHeight - 2)) :: food
                 drawFood(food.head, ctx)
 
                 // FIXME Food generated inside Snake's body
-            }
-
-            if (hero.isBite || hero.isHit) {
-                // TODO End game
-                //js.timers.clearInterval() ?
-                colorSnake = "red"
             }
 
             clearSnake(hero, ctx)
@@ -117,10 +116,13 @@ object SnakeGame extends js.JSApp {
 
                 // TODO Increase score
             }
+
+            if (hero.isBite || hero.isHit) // End game
+                timer.foreach(js.timers.clearInterval _)
         }
 
-        dom.window.setInterval(update, 250)
-
+        val handler: js.Function0[Any] = () => update()
+        timer = Option(js.timers.setInterval(250)(update))
     }
 
     def clearSnake(hero: Snake, ctx: dom.CanvasRenderingContext2D) = {
@@ -156,7 +158,7 @@ object SnakeGame extends js.JSApp {
         def drawSnakeHead(pos: Position) = {
             val x = pos.x * blockSize
             val y = pos.y * blockSize
-            ctx.fillStyle = colorSnake
+            ctx.fillStyle = colorSnakeHead
             ctx.fillRect(x + 1, y + 1, blockSize - 2, blockSize - 2)
             ctx.strokeRect(x + 1, y + 1, blockSize - 2, blockSize - 2)        
         }
@@ -169,8 +171,10 @@ object SnakeGame extends js.JSApp {
         }
 
         drawSnakeHead(hero.body.head)
-        drawSnakeBody(hero.body.tail.head)
-        drawSnakeBody(hero.body.last)
+        if (!hero.body.tail.isEmpty) {
+            drawSnakeBody(hero.body.tail.head)
+            drawSnakeBody(hero.body.last)
+        }
     }
 
     def isValidPosition(pos: Position): Boolean = {
