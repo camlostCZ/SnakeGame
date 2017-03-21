@@ -58,6 +58,7 @@ object SnakeGame extends js.JSApp {
                 timer.foreach(js.timers.clearInterval _)
         }
 
+        updateScore(score)
         timer = Option(js.timers.setInterval(250)(update))
     }
 
