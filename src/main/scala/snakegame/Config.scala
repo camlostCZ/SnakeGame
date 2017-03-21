@@ -15,4 +15,7 @@ object Config {
 
     val imgPoison = dom.document.createElement("img").asInstanceOf[dom.html.Image]
     imgPoison.src = "img/poison.png"
+
+    val imgFood = dom.document.createElement("img").asInstanceOf[dom.html.Image]
+    imgFood.src = "img/cabbage.png"
 }

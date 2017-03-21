@@ -95,8 +95,7 @@ object SnakeGame extends js.JSApp {
     def drawFood(pos: Position, ctx: dom.CanvasRenderingContext2D) = {
         val x = pos.x * Config.blockSize
         val y = pos.y * Config.blockSize
-        ctx.fillStyle = Config.colorFood
-        ctx.fillRect(x, y, Config.blockSize, Config.blockSize)
+        ctx.drawImage(Config.imgFood, x, y, Config.blockSize, Config.blockSize)
     }
 
     def drawPoison(pos: Position, ctx: dom.CanvasRenderingContext2D) = {
