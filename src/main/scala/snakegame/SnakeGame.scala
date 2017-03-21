@@ -33,9 +33,11 @@ object SnakeGame extends js.JSApp {
         def update() = {
             // Try to generate food
             if (rnd.nextInt(100) < 8) {
-                food = Position(1 + rnd.nextInt(Config.viewWidth - 2), 1 + rnd.nextInt(Config.viewHeight - 2)) :: food
-                drawFood(food.head, ctx)
-
+                val pos = Position(1 + rnd.nextInt(Config.viewWidth - 2), 1 + rnd.nextInt(Config.viewHeight - 2))
+                if (!hero.body.contains(pos)) {
+                    food = pos :: food
+                    drawFood(food.head, ctx)
+                }
                 // FIXME Food generated inside Snake's body
             }
 
