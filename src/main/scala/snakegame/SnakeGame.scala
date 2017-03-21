@@ -11,6 +11,7 @@ object SnakeGame extends js.JSApp {
     val hero = new Snake(Config.viewWidth / 2 - 1, Config.viewHeight / 2 - 1)
     var dir = Direction.EAST
     var food: List[Position] = Nil
+    var poison: List[Position] = Nil
     var score = 1
 
     def main(): Unit = {
@@ -31,12 +32,21 @@ object SnakeGame extends js.JSApp {
         }, false)
         
         def update() = {
-            // Try to generate food
+            // Generate food
             if (rnd.nextInt(100) < 8) {
                 val pos = Position(1 + rnd.nextInt(Config.viewWidth - 2), 1 + rnd.nextInt(Config.viewHeight - 2))
-                if (!hero.body.contains(pos)) {
+                if (!hero.body.contains(pos) && !poison.contains(pos)) {
                     food = pos :: food
                     drawFood(food.head, ctx)
+                }
+            }
+
+            // Generate poison
+            if (rnd.nextInt(100) < 2) {
+                val pos = Position(1 + rnd.nextInt(Config.viewWidth - 2), 1 + rnd.nextInt(Config.viewHeight - 2))
+                if (!hero.body.contains(pos) && !poison.contains(pos)) {
+                    poison = pos :: poison
+                    drawPoison(pos, ctx)
                 }
             }
 
@@ -52,7 +62,7 @@ object SnakeGame extends js.JSApp {
                 updateScore(score)
             }
 
-            if (hero.isBite || hero.isHit) // End game
+            if (hero.isBite || hero.isHit || poison.contains(hero.position)) // End game
                 timer.foreach(js.timers.clearInterval _)
         }
 
@@ -87,6 +97,12 @@ object SnakeGame extends js.JSApp {
         val y = pos.y * Config.blockSize
         ctx.fillStyle = Config.colorFood
         ctx.fillRect(x, y, Config.blockSize, Config.blockSize)
+    }
+
+    def drawPoison(pos: Position, ctx: dom.CanvasRenderingContext2D) = {
+        val x = pos.x * Config.blockSize
+        val y = pos.y * Config.blockSize
+        ctx.drawImage(Config.imgPoison, x, y, Config.blockSize, Config.blockSize)
     }
 
     def drawSnake(hero: Snake, ctx: dom.CanvasRenderingContext2D) = {
