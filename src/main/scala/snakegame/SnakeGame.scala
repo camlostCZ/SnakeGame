@@ -58,7 +58,6 @@ object SnakeGame extends js.JSApp {
                 timer.foreach(js.timers.clearInterval _)
         }
 
-        val handler: js.Function0[Any] = () => update()
         timer = Option(js.timers.setInterval(250)(update))
     }
 
