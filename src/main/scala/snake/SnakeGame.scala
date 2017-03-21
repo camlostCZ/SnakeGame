@@ -64,7 +64,7 @@ object SnakeGame extends js.JSApp {
     val viewHeight = 25
     val colorBackground = "white"
     val colorForeground = "black"
-    var colorSnake      = "red"
+    var colorSnake      = "yellow"
     val colorFood       = "green"
 
     val rnd = scala.util.Random
@@ -94,12 +94,14 @@ object SnakeGame extends js.JSApp {
             if (rnd.nextInt(100) < 8) {
                 food = Position(1 + rnd.nextInt(viewWidth - 2), 1 + rnd.nextInt(viewHeight - 2)) :: food
                 drawFood(food.head, ctx)
+
+                // FIXME Food generated inside Snake's body
             }
 
             if (hero.isBite || hero.isHit) {
                 // TODO End game
                 //js.timers.clearInterval() ?
-                colorSnake = "yellow"
+                colorSnake = "red"
             }
 
             clearSnake(hero, ctx)
@@ -151,14 +153,24 @@ object SnakeGame extends js.JSApp {
     }
 
     def drawSnake(hero: Snake, ctx: dom.CanvasRenderingContext2D) = {
-        val lst: List[Position] = List(hero.body.head, hero.body.last)
-        for (pos <- lst) {
+        def drawSnakeHead(pos: Position) = {
+            val x = pos.x * blockSize
+            val y = pos.y * blockSize
+            ctx.fillStyle = colorSnake
+            ctx.fillRect(x + 1, y + 1, blockSize - 2, blockSize - 2)
+            ctx.strokeRect(x + 1, y + 1, blockSize - 2, blockSize - 2)        
+        }
+        def drawSnakeBody(pos: Position) = {
             val x = pos.x * blockSize
             val y = pos.y * blockSize
             ctx.fillStyle = colorSnake
             ctx.fillRect(x + 1, y + 1, blockSize - 2, blockSize - 2)
             ctx.strokeRect(x + 1, y + 1, blockSize - 2, blockSize - 2)
         }
+
+        drawSnakeHead(hero.body.head)
+        drawSnakeBody(hero.body.tail.head)
+        drawSnakeBody(hero.body.last)
     }
 
     def isValidPosition(pos: Position): Boolean = {
