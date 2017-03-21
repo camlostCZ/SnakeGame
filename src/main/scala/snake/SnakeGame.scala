@@ -1,4 +1,4 @@
-package snake
+package snakegame
 
 import scala.scalajs.js
 import scalajs.js.annotation.JSExport
