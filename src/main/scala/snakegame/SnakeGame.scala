@@ -11,6 +11,7 @@ object SnakeGame extends js.JSApp {
     val hero = new Snake()
     var dir = Direction.EAST
     var food: List[Position] = Nil
+    var score = 1
 
     def main(): Unit = {
         val canvas = dom.document.getElementById(Config.canvasId).asInstanceOf[dom.html.Canvas]
@@ -49,7 +50,8 @@ object SnakeGame extends js.JSApp {
                     case _ => true
                 }
 
-                // TODO Increase score
+                score += 1
+                updateScore(score)
             }
 
             if (hero.isBite || hero.isHit) // End game
@@ -120,5 +122,12 @@ object SnakeGame extends js.JSApp {
         clearView(ctx)
         drawBorder(ctx)
         drawSnake(hero, ctx)
+    }
+
+    def updateScore(score: Int) = {
+        val el = dom.document.getElementById("score")
+        val txt = dom.document.createTextNode(s"$score")
+        el.removeChild(el.firstChild)
+        el.appendChild(txt)
     }
 }
