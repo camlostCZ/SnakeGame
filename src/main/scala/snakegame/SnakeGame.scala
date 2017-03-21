@@ -38,7 +38,6 @@ object SnakeGame extends js.JSApp {
                     food = pos :: food
                     drawFood(food.head, ctx)
                 }
-                // FIXME Food generated inside Snake's body
             }
 
             clearSnake(hero, ctx)
