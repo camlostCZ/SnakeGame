@@ -12,7 +12,7 @@ object SnakeGame extends js.JSApp {
     val viewHeight = 25
     val colorBackground = "white"
     val colorForeground = "black"
-    var colorSnakeHead  = "orange"
+    val colorSnakeHead  = "orange"
     val colorSnake      = "yellow"
     val colorFood       = "green"
 
