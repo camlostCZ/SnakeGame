@@ -72,7 +72,9 @@ object SnakeGame extends js.JSApp {
 
     def clearSnake(hero: Snake, ctx: dom.CanvasRenderingContext2D) = {
         // Optimization: clear the last block only
-        ctx.clearRect(hero.body.last.x * Config.blockSize, hero.body.last.y * Config.blockSize, Config.blockSize, Config.blockSize)
+        val x = hero.body.last.x * Config.blockSize
+        val y = hero.body.last.y * Config.blockSize
+        ctx.clearRect(x, y, Config.blockSize, Config.blockSize)
     }
 
     def clearView(ctx: dom.CanvasRenderingContext2D) = {

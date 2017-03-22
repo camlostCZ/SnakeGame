@@ -4,7 +4,7 @@ import org.scalajs.dom
 
 object Config {
     val canvasId = "snake-game"
-    val blockSize = 24
+    val blockSize = 32
     val viewWidth = 24
     val viewHeight = 16
     val colorBackground = "white"
